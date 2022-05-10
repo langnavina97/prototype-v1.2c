@@ -148,15 +148,11 @@ class App extends Component {
       this.setState({ account: accounts[0]}) 
       const SwapContract = new web3.eth.Contract(IndexSwap.abi, "0x28aFA8e930946c5Ea8971595DeBC26a009e7C144");
       const NFTPortfolioContract = new web3.eth.Contract(NFTSwap.abi, "0x40A367c5320440a1aa78aCBC5af0A017Ed1F3772"); 
-      const NFTTokenContract = new web3.eth.Contract(IndexToken.abi, "0x16dBB234A9a595967DdC2ea1bb53379752f09Ad4"); 
-      const DeFiTokenContract = new web3.eth.Contract(IndexToken.abi, "0x6E49456f284e3da7f1515eEE120E2706cab69fD5");
-      this.setState({ SwapContract, DeFiTokenContract, NFTPortfolioContract, NFTTokenContract});
+      this.setState({ SwapContract, NFTPortfolioContract});
     } else if (chainIdDec == "97") {
       const SwapContract2 = new web3.eth.Contract(IndexSwap2.abi, "0xE2a64C8a8F4B167A21206a86764db4e9Df5dC197");
-      const NFTPortfolioContract2 = new web3.eth.Contract(NFTSwap2.abi, "0x0f444D6F25d2F8Fd0639eEc68ce4AA1F03FF6F4F");
-      const NFTTokenContract2 = new web3.eth.Contract(IndexToken2.abi, "0x817ea2A5Fd281d15CA70B05abB5E094356C42996");
-      const DeFiTokenContract2 = new web3.eth.Contract(IndexToken2.abi, "0xF70538622598232a95B1EC1914Fc878d28EBAE68");
-      this.setState({ SwapContract2, DeFiTokenContract2, NFTPortfolioContract2, NFTTokenContract2});
+      const NFTPortfolioContract2 = new web3.eth.Contract(IndexSwap2.abi, "0xd7fE380362eD81E4a646A019e49e533ba49F4EFf");
+      this.setState({ SwapContract2, NFTPortfolioContract2});
     }
   }
 
@@ -268,6 +264,41 @@ class App extends Component {
 
     let tokenShare = indexShare / totalSupplyIndex;
     return tokenShare * tokenSupply;
+  }
+
+  approveNFTTokens = async() => {
+    const web3 = new Web3(window.ethereum);  
+    const contractAddress = "0xd7fE380362eD81E4a646A019e49e533ba49F4EFf";
+
+    const aXSTokenConntract = new web3.eth.Contract(IERC.abi, "0xf34D883EcdE3238B153f38230987a0F4c221a48F");
+    await aXSTokenConntract.methods.approve(contractAddress, "115792089237316195423570985008687907853269984665640564039457584007913129639935").send({ from: "0xa05Ae01a56779a75FDBAa299965E0C1087E11cbc" });
+
+    const mANATokenConntract = new web3.eth.Contract(IERC.abi, "0x8bf2dF0Ff8528088475183a68678bd1Cd7691b69");
+    await mANATokenConntract.methods.approve(contractAddress, "115792089237316195423570985008687907853269984665640564039457584007913129639935").send({ from: "0xa05Ae01a56779a75FDBAa299965E0C1087E11cbc" });
+
+    const sANDTokenConntract = new web3.eth.Contract(IERC.abi, "0x1631A54AC95Ecb0085dB6b8ACf80c4Cee72AEB06");
+    await sANDTokenConntract.methods.approve(contractAddress, "115792089237316195423570985008687907853269984665640564039457584007913129639935").send({ from: "0xa05Ae01a56779a75FDBAa299965E0C1087E11cbc" });
+
+    const tHETATokenConntract = new web3.eth.Contract(IERC.abi, "0x19A5E53eC7B385dbE2E587Ba989eA2AB8F7EaF1e");
+    await tHETATokenConntract.methods.approve(contractAddress, "115792089237316195423570985008687907853269984665640564039457584007913129639935").send({ from: "0xa05Ae01a56779a75FDBAa299965E0C1087E11cbc" });
+
+    const fLOWTokenConntract = new web3.eth.Contract(IERC.abi, "0xe5c48084E1974a971Bd5dF4d9B01daCCA86d5567");
+    await fLOWTokenConntract.methods.approve(contractAddress, "115792089237316195423570985008687907853269984665640564039457584007913129639935").send({ from: "0xa05Ae01a56779a75FDBAa299965E0C1087E11cbc" });
+
+    const xTZTokenConntract = new web3.eth.Contract(IERC.abi, "0xC5De9d5B0BA5b408a3e9530A1BC310d8F2dCC26a");
+    await xTZTokenConntract.methods.approve(contractAddress, "115792089237316195423570985008687907853269984665640564039457584007913129639935").send({ from: "0xa05Ae01a56779a75FDBAa299965E0C1087E11cbc" });
+
+    const gALATokenConntract = new web3.eth.Contract(IERC.abi, "0x4bf1CE8E4c4c86126E57Fa9fc3f1a9631661641c");
+    await gALATokenConntract.methods.approve(contractAddress, "115792089237316195423570985008687907853269984665640564039457584007913129639935").send({ from: "0xa05Ae01a56779a75FDBAa299965E0C1087E11cbc" });
+
+    const cHZTokenConntract = new web3.eth.Contract(IERC.abi, "0xdeEC6f0C22970b9b8a47069bE619bfAe646dEe26");
+    await cHZTokenConntract.methods.approve(contractAddress, "115792089237316195423570985008687907853269984665640564039457584007913129639935").send({ from: "0xa05Ae01a56779a75FDBAa299965E0C1087E11cbc" });
+
+    const eNJTokenConntract = new web3.eth.Contract(IERC.abi, "0xb08A1959f57b9cC8e5A5F1d329EfD90EE3438F65");
+    await eNJTokenConntract.methods.approve(contractAddress, "115792089237316195423570985008687907853269984665640564039457584007913129639935").send({ from: "0xa05Ae01a56779a75FDBAa299965E0C1087E11cbc" });
+
+    const rOSETokenConntract = new web3.eth.Contract(IERC.abi, "0x30c1AC77F4068A063648B549ffF96Ddb9d151325");
+    await rOSETokenConntract.methods.approve(contractAddress, "115792089237316195423570985008687907853269984665640564039457584007913129639935").send({ from: "0xa05Ae01a56779a75FDBAa299965E0C1087E11cbc" });
   }
 
   approveDeFiTokens = async() => {
@@ -385,22 +416,26 @@ class App extends Component {
   // TESTNET
 
   investNFT = async () => {
-    const web3 = new Web3(window.ethereum);
+
+    const web3 = new Web3(window.ethereum);    
     const v = this.state.nftToMint;
     const valueInWei = web3.utils.toWei(v, 'ether');
     
-    const resp = await this.state.NFTPortfolioContract2.methods.investInFundDefi().send({ from: this.state.account, value: valueInWei
-    }).once("receipt", (receipt) => {
+    const resp = await this.state.NFTPortfolioContract2.methods.investInFund(valueInWei).send({ from: this.state.account, value: valueInWei })
+    .once("receipt", (receipt) => {
       console.log(receipt);
+
     })
       .catch((err) => {
         console.log(err);
       });
-    if (resp.status) {
-      swal("Investment successfull!", `You invested ${v} BNB into the portfolio.`, "success");
-    } else {
-      swal("Investment failed!");
-    }
+
+      if (resp.status) {
+        swal("Investment successfull!", `You invested ${v} BNB into the portfolio.`, "success");
+        //window.location.reload();
+      } else {
+        swal("Investment failed!");
+      }
 
   }
 
@@ -408,7 +443,11 @@ class App extends Component {
     const web3 = new Web3(window.ethereum);
     let defiTokenBalanceInWei = await this.state.SwapContract2.methods.balanceOf(this.state.account).call();
     let defiTokenBalance = web3.utils.fromWei(defiTokenBalanceInWei, "ether");
-    this.setState({ defiTokenBalance });
+
+    let nftTokenBalanceInWei = await this.state.NFTPortfolioContract2.methods.balanceOf(this.state.account).call();
+    let nftTokenBalance = web3.utils.fromWei(nftTokenBalanceInWei, "ether");
+
+    this.setState({ defiTokenBalance, nftTokenBalance });
     
   }
 
@@ -432,11 +471,11 @@ class App extends Component {
       } else {
         swal("Investment failed!");
       }
+
+      await this.calcTokenBalances();
   }
 
   withdrawDeFi = async () => {
-    var vault = "0x75c9D3e17284D3AdA7F8B17E06DBE75a98353fF7";
-
     const web3 = new Web3(window.ethereum);
 
     var withdrawAmt = this.state.withdrawValueDefi;
@@ -457,33 +496,21 @@ class App extends Component {
         console.log(err);
       });
 
+      await this.calcTokenBalances();
   }
 
   withdrawNFT = async () => {
-    var vault = "0x75c9D3e17284D3AdA7F8B17E06DBE75a98353fF7";
 
     const web3 = new Web3(window.ethereum);
 
     var withdrawAmt = this.state.withdrawValueNFT;
     var withdrawAmountInWei = web3.utils.toWei(withdrawAmt, 'ether');
+    var sAmount = withdrawAmountInWei.toString();
 
-    const nftBalance = await this.state.NFTTokenContract2.methods.balanceOf(this.state.account).call();
-    if(nftBalance == 0) {
-      swal("Withdrawal amount exceeds balance!");
-      return;
-    }
-
-    var percentage = (withdrawAmountInWei * 100) / nftBalance ;
-    var percentageFinal = Math.round(percentage);
-    console.log(Math.round(percentage));
-  
-    await this.state.NFTTokenContract2.methods.approve("0x0f444D6F25d2F8Fd0639eEc68ce4AA1F03FF6F4F", "7787357773333787487837458347754874574837458374")
+    await this.state.NFTTokenContract2.methods.approve("0xd7fE380362eD81E4a646A019e49e533ba49F4EFf", "115792089237316195423570985008687907853269984665640564039457584007913129639935")
     .send({from: this.state.account});
 
-    var amount = withdrawAmountInWei;
-    var sAmount = amount.toString();
-
-    await this.state.NFTPortfolioContract2.methods.withdrawFromFundNFT(sAmount, percentageFinal
+    await this.state.NFTTokenContract2.methods.withdrawFromFundNew(sAmount
     ).send({
       from: this.state.account, value: 0
     }).once("receipt", (receipt) => {
@@ -511,6 +538,11 @@ class App extends Component {
   init = async() => {
     await this.state.SwapContract2.methods.initializeDefult().send({from: this.state.account});
     await this.state.SwapContract2.methods.updateRate(1,1).send({from: this.state.account});
+  }
+
+  initnft = async() => {
+    await this.state.NFTPortfolioContract2.methods.initializeDefult().send({from: this.state.account});
+    await this.state.NFTPortfolioContract2.methods.updateRate(1,1).send({from: this.state.account});
   }
 
   render() {
@@ -560,25 +592,22 @@ class App extends Component {
       testnet = <Grid divided='vertically'>
         <Grid.Row columns={2} style={{ margin: "20px" }}>
           <Grid.Column>
-
             <Card.Group>
               <Card style={{ width: "900px" }}>
                 <Card.Content style={{ background: "#406ccd" }}>
                 <Card.Header style={{ color: "white" }}>
                   <p style={{ color: "#C0C0C0", "font-weight": "bold", "text-align": "right" }}>APY: XX%</p>
-                    Top 10 Tokens
+                    Metaverse Tokens
                     </Card.Header>
                   <Card.Description>
 
-                    <p style={{ color: "#C0C0C0" }}>Rate: In return of investing 1 BNB you will receive 1 Top10 Token.</p>
-
-                    <Form onSubmit={this.investDeFi}>
-                      <Input style={{ width: "300px", padding: 3 }} required type="text" placeholder="BNB amount to create" name="defiToMint" onChange={this.handleInputChange}></Input>
+                    <Form onSubmit={this.investNFT}>
+                      <Input style={{ width: "300px", padding: 3 }} required type="text" placeholder="BNB amount to create" name="nftToMint" onChange={this.handleInputChange}></Input>
                       <Button color="green" type="submit" style={{ margin: "20px", width: "150px" }}>Create</Button>
                     </Form>
 
-                    <Form onSubmit={this.withdrawDeFi}>
-                      <Input style={{ width: "300px", padding: 3 }} required type="text" placeholder="Top10 amount to redeem" name="withdrawValueDefi" onChange={this.handleInputChange}></Input>
+                    <Form onSubmit={this.withdrawNFT}>
+                      <Input style={{ width: "300px", padding: 3 }} required type="text" placeholder="Top10 amount to redeem" name="withdrawValueNFT" onChange={this.handleInputChange}></Input>
                       <Button color="green" style={{ margin: "20px", width: "150px" }}>Redeem</Button>
                     </Form>
 
