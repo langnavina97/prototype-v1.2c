@@ -151,7 +151,7 @@ class App extends Component {
       this.setState({ SwapContract, NFTPortfolioContract});
     } else if (chainIdDec == "97") {
       const SwapContract2 = new web3.eth.Contract(IndexSwap2.abi, "0xE2a64C8a8F4B167A21206a86764db4e9Df5dC197");
-      const NFTPortfolioContract2 = new web3.eth.Contract(IndexSwap2.abi, "0xd7fE380362eD81E4a646A019e49e533ba49F4EFf");
+      const NFTPortfolioContract2 = new web3.eth.Contract(NFTSwap2.abi, "0xd7fE380362eD81E4a646A019e49e533ba49F4EFf");
       this.setState({ SwapContract2, NFTPortfolioContract2});
     }
   }
@@ -213,10 +213,10 @@ class App extends Component {
   investNFTMainnet = async () => {
     const web3 = new Web3(window.ethereum);
     const v = this.state.nftToMintMainnet;
-    const valueInWei = web3.utils.toWei(v, 'ether');
+    const valueInWei = web3.utils.toWei(v.toString(), 'ether');
     console.log(this.state.NFTPortfolioContract.methods);
     
-    const resp = await this.state.NFTPortfolioContract.methods.investInFundNFT().send({ from: this.state.account, value: valueInWei
+    const resp = await this.state.NFTPortfolioContract.methods.investInFundNFT().send({ from: this.state.account, value: valueInWei.toString()
     }).once("receipt", (receipt) => {
       console.log(receipt);
     })
@@ -418,7 +418,7 @@ class App extends Component {
   investNFT = async () => {
 
     const web3 = new Web3(window.ethereum);    
-    const v = this.state.nftToMint;
+    const v = this.state.defiToMint;
     const valueInWei = web3.utils.toWei(v, 'ether');
     
     const resp = await this.state.NFTPortfolioContract2.methods.investInFund(valueInWei).send({ from: this.state.account, value: valueInWei })
@@ -437,6 +437,8 @@ class App extends Component {
         swal("Investment failed!");
       }
 
+      await this.calcTokenBalances();
+
   }
 
   calcTokenBalances = async () => {
@@ -444,7 +446,7 @@ class App extends Component {
     let defiTokenBalanceInWei = await this.state.SwapContract2.methods.balanceOf(this.state.account).call();
     let defiTokenBalance = web3.utils.fromWei(defiTokenBalanceInWei, "ether");
 
-    let nftTokenBalanceInWei = await this.state.NFTPortfolioContract2.methods.balanceOf(this.state.account).call();
+    let nftTokenBalanceInWei = await this.state.SwapContract2.methods.balanceOf(this.state.account).call();
     let nftTokenBalance = web3.utils.fromWei(nftTokenBalanceInWei, "ether");
 
     this.setState({ defiTokenBalance, nftTokenBalance });
@@ -473,6 +475,7 @@ class App extends Component {
       }
 
       await this.calcTokenBalances();
+
   }
 
   withdrawDeFi = async () => {
@@ -497,20 +500,21 @@ class App extends Component {
       });
 
       await this.calcTokenBalances();
+
   }
-
   withdrawNFT = async () => {
-
     const web3 = new Web3(window.ethereum);
 
     var withdrawAmt = this.state.withdrawValueNFT;
-    var withdrawAmountInWei = web3.utils.toWei(withdrawAmt, 'ether');
+    var withdrawAmountInWei = web3.utils.toWei(withdrawAmt.toString(), 'ether');
     var sAmount = withdrawAmountInWei.toString();
 
-    await this.state.NFTTokenContract2.methods.approve("0xd7fE380362eD81E4a646A019e49e533ba49F4EFf", "115792089237316195423570985008687907853269984665640564039457584007913129639935")
+    console.log(this.state.NFTPortfolioContract2);
+
+    await this.state.NFTPortfolioContract2.methods.approve("0xd7fE380362eD81E4a646A019e49e533ba49F4EFf", "115792089237316195423570985008687907853269984665640564039457584007913129639935")
     .send({from: this.state.account});
 
-    await this.state.NFTTokenContract2.methods.withdrawFromFundNew(sAmount
+    await this.state.NFTPortfolioContract2.methods.withdrawFromFundNew(sAmount
     ).send({
       from: this.state.account, value: 0
     }).once("receipt", (receipt) => {
@@ -597,17 +601,17 @@ class App extends Component {
                 <Card.Content style={{ background: "#406ccd" }}>
                 <Card.Header style={{ color: "white" }}>
                   <p style={{ color: "#C0C0C0", "font-weight": "bold", "text-align": "right" }}>APY: XX%</p>
-                    Metaverse Tokens
+                    Top 10 Tokens
                     </Card.Header>
                   <Card.Description>
 
-                    <Form onSubmit={this.investNFT}>
-                      <Input style={{ width: "300px", padding: 3 }} required type="text" placeholder="BNB amount to create" name="nftToMint" onChange={this.handleInputChange}></Input>
+                  <Form onSubmit={this.investDeFi}>
+                      <Input style={{ width: "300px", padding: 3 }} required type="text" placeholder="BNB amount to create" name="defiToMint" onChange={this.handleInputChange}></Input>
                       <Button color="green" type="submit" style={{ margin: "20px", width: "150px" }}>Create</Button>
                     </Form>
 
-                    <Form onSubmit={this.withdrawNFT}>
-                      <Input style={{ width: "300px", padding: 3 }} required type="text" placeholder="Top10 amount to redeem" name="withdrawValueNFT" onChange={this.handleInputChange}></Input>
+                    <Form onSubmit={this.withdrawDeFi}>
+                      <Input style={{ width: "300px", padding: 3 }} required type="text" placeholder="Top10 amount to redeem" name="withdrawValueDefi" onChange={this.handleInputChange}></Input>
                       <Button color="green" style={{ margin: "20px", width: "150px" }}>Redeem</Button>
                     </Form>
 
