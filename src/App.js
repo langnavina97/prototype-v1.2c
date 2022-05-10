@@ -115,7 +115,11 @@ class App extends Component {
     const web3 = window.web3;
     const chainIdDec = await web3.eth.getChainId();
 
-    this.setState({chainId: chainIdDec});
+    this.setState({chainId: chainIdDec})
+
+    if(chainIdDec == "97") {
+      await this.calcTokenBalances();
+    }  
   }
 
   // first up is to detect ethereum provider
@@ -260,7 +264,7 @@ class App extends Component {
     const totalSupplyIndex = this.state.IndexSwap.totalSupply().call();
 
     const TokenContract = new web3.eth.Contract(IERC.abi, token);
-    const tokenSupply = TokenContract.methods.balanceOf(vault);
+    const tokenSupply = TokenContract.methods.balanceOf(vault).call();
 
     let tokenShare = indexShare / totalSupplyIndex;
     return tokenShare * tokenSupply;
@@ -400,6 +404,14 @@ class App extends Component {
 
   }
 
+  calcTokenBalances = async () => {
+    const web3 = new Web3(window.ethereum);
+    let defiTokenBalanceInWei = await this.state.SwapContract2.methods.balanceOf(this.state.account).call();
+    let defiTokenBalance = web3.utils.fromWei(defiTokenBalanceInWei, "ether");
+    this.setState({ defiTokenBalance });
+    
+  }
+
   investDeFi = async () => {
     const web3 = new Web3(window.ethereum);    
     const v = this.state.defiToMint;
@@ -420,7 +432,6 @@ class App extends Component {
       } else {
         swal("Investment failed!");
       }
-
   }
 
   withdrawDeFi = async () => {
@@ -570,6 +581,24 @@ class App extends Component {
                       <Input style={{ width: "300px", padding: 3 }} required type="text" placeholder="Top10 amount to redeem" name="withdrawValueDefi" onChange={this.handleInputChange}></Input>
                       <Button color="green" style={{ margin: "20px", width: "150px" }}>Redeem</Button>
                     </Form>
+
+                    <Table style={{ "margin-left": "auto", "margin-right": "auto" }} basic='very' celled collapsing>
+                        <Table.Header>
+                          <Table.Row>
+                            <Table.HeaderCell style={{ color: "white" }}>Token</Table.HeaderCell>
+                            <Table.HeaderCell style={{ color: "white" }}>Balance</Table.HeaderCell>
+                            <Table.HeaderCell style={{ color: "white" }}>Balance in USD</Table.HeaderCell>
+                          </Table.Row>
+                        </Table.Header>
+
+                        <Table.Body>
+                          <Table.Row>
+                            <Table.Cell style={{ color: "#C0C0C0" }}>Top10 Token</Table.Cell>
+                            <Table.Cell style={{ color: "#C0C0C0" }}>{this.state.defiTokenBalance}</Table.Cell>
+                            <Table.Cell style={{ color: "#C0C0C0" }}>-</Table.Cell>
+                          </Table.Row>
+                        </Table.Body>
+                      </Table>
 
                   </Card.Description>
                 </Card.Content>
