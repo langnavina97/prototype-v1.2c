@@ -2,12 +2,10 @@ import React, { Component } from "react";
 
 // Mainnet
 import IndexSwap from "./abis/IndexSwap.json";
-import IndexToken from "./abis/indexToken.json";
 import NFTSwap from "./abis/NFTPortfolio.json";
 
 // Testnet
 import IndexSwap2 from "./abis2/IndexSwap.json";
-import IndexToken2 from "./abis2/indexToken.json";
 import NFTSwap2 from "./abis2/NFTPortfolio.json";
 
 import IERC from "./abis/IERC20.json";
@@ -146,7 +144,7 @@ class App extends Component {
     }
     if(chainIdDec == "56") {
       this.setState({ account: accounts[0]}) 
-      const SwapContract = new web3.eth.Contract(IndexSwap.abi, "0x28aFA8e930946c5Ea8971595DeBC26a009e7C144");
+      const SwapContract = new web3.eth.Contract(IndexSwap.abi, "0xB7a4aB7C7d323f8a8a9B013554b50eE1ba86F18D");
       const NFTPortfolioContract = new web3.eth.Contract(NFTSwap.abi, "0x40A367c5320440a1aa78aCBC5af0A017Ed1F3772"); 
       this.setState({ SwapContract, NFTPortfolioContract});
     } else if (chainIdDec == "97") {
@@ -233,9 +231,9 @@ class App extends Component {
   investDeFiMainnet = async () => {
     const web3 = new Web3(window.ethereum);    
     const v = this.state.defiToMintMainnet;
-    const valueInWei = web3.utils.toWei(v, 'ether');
+    const valueInWei = web3.utils.toWei(v.toString(), 'ether');
     
-    const resp = await this.state.SwapContract.methods.investInFund(valueInWei).send({ from: this.state.account, value: valueInWei })
+    const resp = await this.state.SwapContract.methods.investInFund(valueInWei).send({ from: this.state.account, value: valueInWei.toString() })
     .once("receipt", (receipt) => {
       console.log(receipt);
 
@@ -250,7 +248,8 @@ class App extends Component {
       } else {
         swal("Investment failed!");
       }
-  }
+
+    }
 
   calcTokenBalanceMainnet = async(token, user) => {
     const web3 = new Web3(window.ethereum);
@@ -338,19 +337,15 @@ class App extends Component {
   }
 
   withdrawDeFiMainnet = async () => {
-    const vault = "0x75c9D3e17284D3AdA7F8B17E06DBE75a98353fF7";
 
     const web3 = new Web3(window.ethereum);
 
     var withdrawAmt = this.state.withdrawValueDefi;
     var withdrawAmountInWei = web3.utils.toWei(withdrawAmt, 'ether');
+    var sAmount = withdrawAmountInWei.toString();
 
-    await this.state.SwapContract.methods.approve("0x28aFA8e930946c5Ea8971595DeBC26a009e7C144", "115792089237316195423570985008687907853269984665640564039457584007913129639935")
+    await this.state.SwapContract.methods.approve("0xB7a4aB7C7d323f8a8a9B013554b50eE1ba86F18D", "115792089237316195423570985008687907853269984665640564039457584007913129639935")
     .send({from: this.state.account});
-
-
-    var amount = withdrawAmountInWei;
-    var sAmount = amount.toString();
 
     await this.state.SwapContract.methods.withdrawFromFundNew(sAmount
     ).send({
@@ -544,6 +539,11 @@ class App extends Component {
     await this.state.SwapContract2.methods.updateRate(1,1).send({from: this.state.account});
   }
 
+  initMainnet = async() => {
+    await this.state.SwapContract.methods.initializeDefult().send({from: this.state.account});
+    await this.state.SwapContract.methods.updateRate(1,1).send({from: this.state.account});
+  }
+
   initnft = async() => {
     await this.state.NFTPortfolioContract2.methods.initializeDefult().send({from: this.state.account});
     await this.state.NFTPortfolioContract2.methods.updateRate(1,1).send({from: this.state.account});
@@ -666,9 +666,8 @@ class App extends Component {
                       Top 10 Tokens
                       </Card.Header>
                     <Card.Description>
-                      <p style={{ color: "#C0C0C0" }}>Rate: In return of investing 1 BNB you will receive 1 Top10 Token.</p>
 
-                      <Form>
+                      <Form onSubmit={this.investDeFiMainnet}>
                         <Input style={{ width: "300px", padding: 3 }} required type="text" placeholder="BNB amount to create" name="defiToMintMainnet" onChange={this.handleInputChange}></Input>
                         <Button color="green" type="submit" style={{ margin: "20px", width: "150px" }}>Create</Button>
                       </Form>
@@ -705,6 +704,8 @@ class App extends Component {
         {mainnet}
         
         {testnet}
+
+        <Button onClick={this.initMainnet} color="green" style={{ margin: "20px", width: "150px" }}>init</Button>
 
       </div >
     );
