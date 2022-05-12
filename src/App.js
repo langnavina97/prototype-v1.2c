@@ -148,7 +148,7 @@ class App extends Component {
       const NFTPortfolioContract = new web3.eth.Contract(NFTSwap.abi, "0x40A367c5320440a1aa78aCBC5af0A017Ed1F3772"); 
       this.setState({ SwapContract, NFTPortfolioContract});
     } else if (chainIdDec == "97") {
-      const SwapContract2 = new web3.eth.Contract(IndexSwap2.abi, "0xBbADB4A22eAaB5c4D99dd275620e1bF52e62886d");
+      const SwapContract2 = new web3.eth.Contract(IndexSwap2.abi, "0xb8b6b271C8AD22eb965338d5Cf9CAD122c65B72A");
       const NFTPortfolioContract2 = new web3.eth.Contract(NFTSwap2.abi, "0xd7fE380362eD81E4a646A019e49e533ba49F4EFf");
       this.setState({ SwapContract2, NFTPortfolioContract2});
     }
@@ -302,7 +302,7 @@ class App extends Component {
 
   approveDeFiTokens = async() => {
     const web3 = new Web3(window.ethereum);  
-    const contractAddress = "0xBbADB4A22eAaB5c4D99dd275620e1bF52e62886d";
+    const contractAddress = "0xb8b6b271C8AD22eb965338d5Cf9CAD122c65B72A";
     const vault = "0xa05Ae01a56779a75FDBAa299965E0C1087E11cbc";
 
     const BTCTokenConntract = new web3.eth.Contract(IERC.abi, "0x4b1851167f74FF108A994872A160f1D6772d474b");
@@ -480,7 +480,7 @@ class App extends Component {
     var withdrawAmountInWei = web3.utils.toWei(withdrawAmt, 'ether');
     var sAmount = withdrawAmountInWei.toString();
 
-    await this.state.SwapContract2.methods.approve("0xBbADB4A22eAaB5c4D99dd275620e1bF52e62886d", "115792089237316195423570985008687907853269984665640564039457584007913129639935")
+    await this.state.SwapContract2.methods.approve("0xb8b6b271C8AD22eb965338d5Cf9CAD122c65B72A", "115792089237316195423570985008687907853269984665640564039457584007913129639935")
     .send({from: this.state.account});
 
     await this.state.SwapContract2.methods.withdrawFromFundNew(sAmount
@@ -704,7 +704,10 @@ class App extends Component {
         {mainnet}
         
         {testnet}
-        
+
+        <Button onClick={this.init} color="green" style={{ margin: "20px", width: "150px" }}>Init</Button>
+        <Button onClick={this.approveDeFiTokens} color="green" style={{ margin: "20px", width: "150px" }}>Approve</Button>
+
       </div >
     );
   }
