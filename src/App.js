@@ -148,7 +148,7 @@ class App extends Component {
       const NFTPortfolioContract = new web3.eth.Contract(NFTSwap.abi, "0x40A367c5320440a1aa78aCBC5af0A017Ed1F3772"); 
       this.setState({ SwapContract, NFTPortfolioContract});
     } else if (chainIdDec == "97") {
-      const SwapContract2 = new web3.eth.Contract(IndexSwap2.abi, "0x70a7b36214f0F489aFC1f64964773D46ed0843ea");
+      const SwapContract2 = new web3.eth.Contract(IndexSwap2.abi, "0x599E6BDfDB83951Aa7E0f921068F89E21EE18ccc");
       const NFTPortfolioContract2 = new web3.eth.Contract(NFTSwap2.abi, "0xd7fE380362eD81E4a646A019e49e533ba49F4EFf");
       this.setState({ SwapContract2, NFTPortfolioContract2});
     }
@@ -302,7 +302,7 @@ class App extends Component {
 
   approveDeFiTokens = async() => {
     const web3 = new Web3(window.ethereum);  
-    const contractAddress = "0x70a7b36214f0F489aFC1f64964773D46ed0843ea";
+    const contractAddress = "0x599E6BDfDB83951Aa7E0f921068F89E21EE18ccc";
     const vault = "0xa05Ae01a56779a75FDBAa299965E0C1087E11cbc";
 
     const BTCTokenConntract = new web3.eth.Contract(IERC.abi, "0x4b1851167f74FF108A994872A160f1D6772d474b");
@@ -480,7 +480,7 @@ class App extends Component {
     var withdrawAmountInWei = web3.utils.toWei(withdrawAmt, 'ether');
     var sAmount = withdrawAmountInWei.toString();
 
-    await this.state.SwapContract2.methods.approve("0x70a7b36214f0F489aFC1f64964773D46ed0843ea", "115792089237316195423570985008687907853269984665640564039457584007913129639935")
+    await this.state.SwapContract2.methods.approve("0x599E6BDfDB83951Aa7E0f921068F89E21EE18ccc", "115792089237316195423570985008687907853269984665640564039457584007913129639935")
     .send({from: this.state.account});
 
     await this.state.SwapContract2.methods.withdrawFromFundNew(sAmount
@@ -705,7 +705,7 @@ class App extends Component {
         
         {testnet}
 
-
+        <Button onClick={this.init} color="green" style={{ margin: "20px", width: "150px" }}>Init</Button>
       </div >
     );
   }
