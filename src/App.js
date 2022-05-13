@@ -705,7 +705,6 @@ class App extends Component {
         
         {testnet}
 
-        <Button onClick={this.init} color="green" style={{ margin: "20px", width: "150px" }}>Init</Button>
 
       </div >
     );
